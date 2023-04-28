@@ -1,0 +1,25 @@
+{
+  "name": "proceso-de-forms",
+  "version": "1.0.0",
+  "description": "conexion a un servidor",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "#"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "itgam"
+  ],
+  "author": "@juan",
+  "license": "MIT"
+}
