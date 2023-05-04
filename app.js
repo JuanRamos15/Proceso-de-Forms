@@ -1,52 +1,62 @@
 import path from "path";
 import { promises as fs } from 'fs';
+
+global["__dirname"] = path.dirname(new URL(import.meta.url).pathname);
+//se crea la constante de error 500
+const  error500 = path.join(__dirname, "./views/500.html");
+
 export default async (req, res) => {
     // Desestructurando de "req"
     let { url, method } = req;
-
+    
     console.log(`📣 CLIENT-REQUEST: ${req.url} ${req.method}`);
 
     // Enrutando peticiones
     switch (url) {
         case '/':
-            const readHtml = path.join(__dirname, 'index.html');
+            const readIndex = path.join(__dirname, 'index.html');
             try {
-                const data = await fs.readFile(faviconPath);
-                res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+                const data = await fs.readFile("./views/index.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.statusCode = 200;
                 res.end(data);
             } catch (err) {
-
-
-                // Peticion raiz
-                // Estableciendo cabeceras
-                res.setHeader('Content-Type', 'text/html');
-                // Escribiendo la respuesta
-                res.write('');
-                console.log(`📣 Respondiendo: 200 ${req.url} ${req.method}`);
+                console.error(err);
+                const data = await fs.readFile("./views/500.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.end();
+                console.log(`📣 Respondiendo: 500 ${req.url} ${req.method}`);
                 // Estableciendo codigo de respuesta
-                res.statusCode = 200;
+                res.statusCode = 500;
                 // Cerrando la comunicacion
                 res.end();
             }
             break;
         case '/author':
-            // se crea el nuevo case para poder entrar a author
-            // Estableciendo cabeceras
-            res.setHeader('Content-Type', 'text/html');
-            // Escribiendo la respuesta
-            res.write(``);
-            console.log(`📣 Respondiendo: Author ${req.url} ${req.method}`);
-            // Estableciendo codigo de respuesta
-            res.statusCode = 215;
-            // Cerrando la comunicacion
-            res.end();
+            const readAuthor = path.join(__dirname, 'author.html');
+            try {
+                const data = await fs.readFile("./views/author.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.statusCode = 200;
+                res.end(data);
+            } catch (err) {
+                console.error(err);
+                const data = await fs.readFile("./views/500.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.end();
+                console.log(`📣 Respondiendo: 500 ${req.url} ${req.method}`);
+                // Estableciendo codigo de respuesta
+                res.statusCode = 500;
+                // Cerrando la comunicacion
+                res.end();
+            }
             break;
         case "/favicon.ico":
             // Especificar la ubicación del archivo de icono
             const faviconPath = path.join(__dirname, 'favicon.ico');
             try {
                 const data = await fs.readFile(faviconPath);
-                res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+                res.writeHead(200, { "Content-Type": "image/x-icon" });
                 res.end(data);
             } catch (err) {
                 console.error(err);
@@ -100,27 +110,23 @@ export default async (req, res) => {
             break;
         // Continua con el defautl
         default:
-            // Peticion raiz
-            // Estableciendo cabeceras
-            res.setHeader('Content-Type', 'text/html');
-            // Escribiendo la respuesta
-            res.write(`
-        <html>
-          <head>
-            <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico">
-            <title>My App</title>
-          </head>
-          <body> 
-            <h1>&#128534; 404 Recurso no encontrado</h1>
-            <p>Lo sentimos pero no tenemos lo que buscas...</p>
-          </body>
-        </html>
-        `);
-            console.log(`📣 Respondiendo: 404 ${req.url} ${req.method}`);
-            // Estableciendo codigo de respuesta
-            res.statusCode = 404;
-            // Cerrando la comunicacion
-            res.end();
-            break;
+            const read404 = path.join(__dirname, 'author.html');
+            try {
+                const data = await fs.readFile("./views/404.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.statusCode = 404;
+                res.end(data);
+            } catch (err) {
+                console.error(err);
+                const data = await fs.readFile("./views/500.html");
+                res.writeHead(200, { "Content-Type": "text/html"  });
+                res.end();
+                console.log(`📣 Respondiendo: 500 ${req.url} ${req.method}`);
+                // Estableciendo codigo de respuesta
+                res.statusCode = 500;
+                // Cerrando la comunicacion
+                res.end();
+            }
+        break;
     }
 }
